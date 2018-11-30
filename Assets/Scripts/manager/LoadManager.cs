@@ -105,6 +105,16 @@ public class LoadManager : MonoBehaviour {
         //开始加载场景
         IsStartLoading = true;
         ProgressGameObject.SetActive(true);
+        switch (scene)
+        {
+            case GameResources.SceneName.BATTLE:
+            case GameResources.SceneName.MAIN:
+                MaxResourcesProgressValue = 0;
+                break;
+            default:
+                ProgressGameObject.SetActive(true);
+                break;
+        }
         StartCoroutine(LoadScene(scene, res, loadcall));
     }
 

@@ -20,6 +20,7 @@ public class MatchHandler : MonoBehaviour, IHandler
                     {
                         case 0:
                         case -2:
+                            //离开匹配成功后，加载主界面,关闭匹配界面
                             GameApp.Instance.GameLevelManagerScript.CloseSystemUI(GameResources.SystemUIType.MATCHPANEL);
                             break;
                         case -1:
@@ -68,6 +69,8 @@ public class MatchHandler : MonoBehaviour, IHandler
             case MatchProtocol.MATCHFINISH_BRQ:
                 {
                     //TODO:LODE BATTLE
+                    //匹配成功加载battle场景
+                    GameApp.Instance.GameLevelManagerScript.LoadScene(GameResources.SceneName.BATTLE);
                 }
                 break;
             case MatchProtocol.MATCHINFO_BRQ:

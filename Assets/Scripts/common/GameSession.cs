@@ -1,4 +1,5 @@
-﻿using GameProtocol.model.login;
+﻿using GameProtocol;
+using GameProtocol.model.login;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,5 +48,10 @@ public class GameSession
                 UserInfoChangeHandler();
         }
     }
+
+    /// <summary>
+    /// 游戏房间类型
+    /// </summary>
+    public SConst.GameType RoomeType = SConst.GameType.WINTHREEPOKER;
 }
 

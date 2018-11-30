@@ -81,7 +81,8 @@ public class GameResources  {
     {
         CANVASLOGO,//初始化场景
         CANVASLOGIN,//登录场景
-        CANVASMAIN,
+        CANVASMAIN,//主界面UI
+        CANVASBATTLE,//游戏UI
     }
 
     /// <summary>
@@ -92,6 +93,7 @@ public class GameResources  {
         GameData.Instance.CanvasName.Add(CanvasTag.CANVASLOGO, "logoCanvas");
         GameData.Instance.CanvasName.Add(CanvasTag.CANVASLOGIN, "loginCanvas");
         GameData.Instance.CanvasName.Add(CanvasTag.CANVASMAIN, "MainCanvas");
+        GameData.Instance.CanvasName.Add(CanvasTag.CANVASBATTLE, "BattleCanvas");
     }
     #endregion
 
@@ -101,7 +103,9 @@ public class GameResources  {
         NULL,
         UIHINTLOGPANEL,
         UIOPTIONSPANEL,//设置界面
-        MATCHPANEL,
+        MATCHPANEL,//匹配页面
+        CARDOTHER_TP,//三张游戏桌子页面
+        UIFIGHT_TP,//三张游戏UI页面
     }
     /// <summary>
     /// 系统页面
@@ -111,6 +115,8 @@ public class GameResources  {
         GameData.Instance.SystemUI.Add(SystemUIType.UIHINTLOGPANEL, "system/hintLogPanel");
         GameData.Instance.SystemUI.Add(SystemUIType.UIOPTIONSPANEL, "system/optionsPanel");
         GameData.Instance.SystemUI.Add(SystemUIType.MATCHPANEL, "system/MatchPanel");
+        GameData.Instance.SystemUI.Add(SystemUIType.CARDOTHER_TP, "system/CardPanel_TP");
+        GameData.Instance.SystemUI.Add(SystemUIType.UIFIGHT_TP, "system/UI_FightTP");
     }
     #endregion
 

@@ -67,9 +67,6 @@ public class GameLevelManager : MonoBehaviour {
                     };
                 }
                 break;
-            case GameResources.SceneName.BATTLE:
-
-                break;
             case GameResources.SceneName.LOGO:
                 {
                     LoadResourcesModel rM = new global::LoadResourcesModel();
@@ -96,6 +93,31 @@ public class GameLevelManager : MonoBehaviour {
                          GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(rM.path, null, Vector3.zero);
                          go.AddComponent<UI_main>();
                      };
+                }
+                break;
+            case GameResources.SceneName.BATTLE:
+                {
+                    LoadResourcesModel rM = new LoadResourcesModel();
+                    rM.type = GameResources.ResourceType.PREFAB;
+                    rM.path = GameResources.UIResourcesPath + GameData.Instance.CanvasName[GameResources.CanvasTag.CANVASBATTLE];
+                    rModel.Add(rM);
+
+                    LoadResourcesModel rM1 = new LoadResourcesModel();
+                    rM1.type = GameResources.ResourceType.PREFAB;
+                    rM1.path = GameResources.UIResourcesPath + GameData.Instance.SystemUI[GameResources.SystemUIType.CARDOTHER_TP];
+                    rModel.Add(rM1);
+
+                    LoadResourcesModel rM2 = new LoadResourcesModel();
+                    rM2.type = GameResources.ResourceType.PREFAB;
+                    rM2.path = GameResources.UIResourcesPath + GameData.Instance.SystemUI[GameResources.SystemUIType.UIFIGHT_TP];
+                    rModel.Add(rM2);
+
+                    call = delegate ()
+                    {
+                        GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(rM.path, null, Vector3.zero);
+                        go.AddComponent<GameOther>();
+                    };
+
                 }
                 break;
         }

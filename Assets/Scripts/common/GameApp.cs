@@ -85,4 +85,14 @@ public class GameApp  {
     /// 是常量，不是单例
     /// </summary>
     public GameConst GameConstScript=new GameConst ();
+
+    /// <summary>
+    /// 游戏总管理脚本
+    /// </summary>
+    public GameOther GameOtherScript;
+
+    /// <summary>
+    /// 游戏UI管理脚本
+    /// </summary>
+    public UI_Fight UI_FightScript;
 }
