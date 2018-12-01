@@ -28,7 +28,7 @@ public class GameLevelManager : MonoBehaviour {
         //告知unity不要将gamecanvas删除掉
         DontDestroyOnLoad(transform.parent);
         //设置分辨率
-        Screen.SetResolution(1920, 1080, false);
+        Screen.SetResolution(1920/2, 1080/2, false);
         //游戏开始4秒后加载LOGO场景
         GameApp.Instance.TimeManagerScript.AddShedule(delegate ()
             {
