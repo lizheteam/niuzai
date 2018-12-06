@@ -90,7 +90,9 @@ public class GameLevelManager : MonoBehaviour {
                     rModel.Add(rM);
                     call = delegate ()
                      {
+                         //场景是空白场景，UI或其他资源在场景加载后进行实例化生成，添加到本场景
                          GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(rM.path, null, Vector3.zero);
+                         //UI和代码同样也是分离的,方便代码热更新
                          go.AddComponent<UI_main>();
                      };
                 }
@@ -114,7 +116,9 @@ public class GameLevelManager : MonoBehaviour {
 
                     call = delegate ()
                     {
+                        //场景是空白场景，UI或其他资源在场景加载后进行实例化生成，添加到本场景
                         GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(rM.path, null, Vector3.zero);
+                        //UI和代码同样也是分离的,方便代码热更新
                         go.AddComponent<GameOther>();
                     };
 
