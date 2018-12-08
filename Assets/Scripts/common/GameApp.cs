@@ -95,4 +95,29 @@ public class GameApp  {
     /// 游戏UI管理脚本
     /// </summary>
     public UI_Fight UI_FightScript;
+
+    /// <summary>
+    /// 玩家战斗时头像组件
+    /// </summary>
+    public UI_Head UI_HeadScript;
+
+    /// <summary>
+    /// 游戏手牌管理
+    /// </summary>
+    public CardOther CardOtherScript;
+
+    /// <summary>
+    /// 获取玩家人数
+    /// </summary>
+    /// <returns></returns>
+    public int GetPlayerCount()
+    {
+        switch (GameSession .Instance .RoomeType)
+        {
+            case GameProtocol.SConst.GameType.WINTHREEPOKER:
+                return 2;
+            default:
+                return 4;
+        }
+    }
 }

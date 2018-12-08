@@ -55,6 +55,9 @@ public class NetMessageUtil : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// 匹配组件
+    /// </summary>
     private MatchHandler matchHandler;
     private MatchHandler MatchHandler
     {
@@ -69,6 +72,24 @@ public class NetMessageUtil : MonoBehaviour {
             return matchHandler;
         }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private FightHandler fightHandler;
+    private FightHandler FightHandler
+    {
+        get
+        {
+            if(fightHandler ==null)
+            {
+                if (!GetComponent<FightHandler>())
+                    fightHandler = gameObject.AddComponent<FightHandler>();
+                fightHandler = gameObject.GetComponent<FightHandler>();
+            }
+            return fightHandler;
+        }
+    }
     #endregion
 
     /// <summary>
@@ -79,6 +100,7 @@ public class NetMessageUtil : MonoBehaviour {
         GameApp.Instance.NetMessageUtilScript = this;
         //GameApp.Instance.DebugManagerScript.Log("Net message util Awake");
     }
+
     /// <summary>
     /// 脚本挂载的对象第一次显示在场景时执行
     /// </summary>
@@ -147,6 +169,9 @@ public class NetMessageUtil : MonoBehaviour {
                 break;
             case TypeProtocol.MATCH:
                 MatchHandler.MessageReceive(Model);
+                break;
+            case TypeProtocol.FIGHT:
+                FightHandler.MessageReceive(Model);
                 break;
         }
     }

@@ -127,6 +127,7 @@ public class GameResources  {
     public enum ItemTag
     {
         HINTBOXITEM=0,//通用提示框
+        TPHEAD=1,//赢三张头像
     }
 
     /// <summary>
@@ -135,6 +136,7 @@ public class GameResources  {
     void RegisterItem()
     {
         GameData.Instance.ItemName.Add(ItemTag.HINTBOXITEM, "hintitem");
+        GameData.Instance.ItemName.Add(ItemTag.TPHEAD, "headImage0");
     }
     #endregion
 
@@ -164,4 +166,15 @@ public class GameResources  {
     /// 音乐资源存储路径
     /// </summary>
     public const string AudioResourcesPath = "Audio/";
+
+    /// <summary>
+    /// 扑克资源存储路径
+    /// </summary>
+    public const string PokerResourcesPath = "Texture/poker/";
+
+    /// <summary>
+    /// 扑克背景图资源存储路径
+    /// </summary>
+    public const string PokerBgResourcesPath = "Texture/poker/bg_";
+
 }

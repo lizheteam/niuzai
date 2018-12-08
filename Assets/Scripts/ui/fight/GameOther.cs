@@ -25,10 +25,11 @@ public class GameOther : MonoBehaviour {
                 OtherPanel = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, cardParent, Vector3.zero);
                 //生成UI
                 path = GameResources.UIResourcesPath + GameData.Instance.SystemUI[GameResources.SystemUIType.UIFIGHT_TP];
-                OtherPanel = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, uiParent, Vector3.zero);
+                UIPanel = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, uiParent, Vector3.zero);
                 //添加脚本
-                cardParent.gameObject.AddComponent<CardOther>();
+                OtherPanel.gameObject.AddComponent<TPCardOther>();
                 uiParent.gameObject.AddComponent<UI_Fight>();
+                UIPanel.AddComponent<UI_Head>();
                 break;
             case GameProtocol.SConst.GameType.XZDD:
 

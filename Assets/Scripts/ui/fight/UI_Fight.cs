@@ -3,6 +3,8 @@ using System.Collections;
 using GameProtocol;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
+using GameProtocol.model.fight;
 
 public class UI_Fight : MonoBehaviour {
     /// <summary>
@@ -20,6 +22,16 @@ public class UI_Fight : MonoBehaviour {
     /// </summary>
     Image ElectricSlider;
 
+    /// <summary>
+    /// 时间刷新计时器id
+    /// </summary>
+    int UpdateTimeId = -1;
+
+    /// <summary>
+    /// 玩家id和对战信息的队伍信息集
+    /// </summary>
+    Dictionary<int, FightUserModel> TeamInfo = new Dictionary<int, FightUserModel>();
+
     void Awake()
     {
         GameApp.Instance.UI_FightScript = this;
@@ -27,6 +39,12 @@ public class UI_Fight : MonoBehaviour {
     }
 
 	void Start () {
+    }
+
+    void OnDestroy()
+    {
+        if (UpdateTimeId != -1)
+            GameApp.Instance.TimeManagerScript.Remove(UpdateTimeId);
     }
 
     /// <summary>
@@ -50,10 +68,52 @@ public class UI_Fight : MonoBehaviour {
     void UpdateTime()
     {
         TimeText.text = DateTime.Now.ToString("hh:mm");
-        GameApp.Instance.TimeManagerScript.AddShedule(delegate () {
+        UpdateTimeId = GameApp.Instance.TimeManagerScript.AddShedule(delegate () {
             UpdateTime();
         },60*1000);
     }
 
+    /// <summary>
+    /// id缓存
+    /// </summary>
+    List<int> cacheId = new List<int>();
 
+    /// <summary>
+    /// 刷新队伍成员信息
+    /// </summary>
+    /// <param name="model"></param>
+    public void UpdateTeam(FightUserModel model)
+    {
+        switch (GameSession .Instance.RoomeType )
+        {
+            case SConst.GameType.WINTHREEPOKER:
+                GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().UpdateData(model);
+                break;
+        }
+        if(TeamInfo .ContainsKey (model .id))
+        {
+            //TODO:更新玩家信息
+            return;
+        }
+        //添加队伍成员
+        TeamInfo.Add(model.id, model);
+        //将队伍成员的id进行缓存，直到收到玩家自己的信息
+        if(!TeamInfo.ContainsKey(GameSession .Instance .UserInfo.id))
+        {
+            cacheId.Add(model.id);
+            return;
+        }
+        int userdir = TeamInfo[GameSession.Instance.UserInfo.id].direction;
+        for (int i = 0; i < cacheId .Count; i++)
+        {
+            GameApp.Instance.UI_HeadScript.UpdateItem(TeamInfo[cacheId[i]], userdir);
+        }
+        cacheId.Clear();
+        GameApp.Instance.UI_HeadScript.UpdateItem(model, userdir);
+        if(TeamInfo .Count >= GameApp .Instance .GetPlayerCount ())
+        {
+            //TODO:游戏即将开始
+
+        }
+    }
 }
