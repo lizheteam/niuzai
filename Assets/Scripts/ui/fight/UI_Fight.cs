@@ -86,6 +86,7 @@ public class UI_Fight : MonoBehaviour {
     {
         switch (GameSession .Instance.RoomeType )
         {
+            //如果当前游戏类型是赢三张，则直接刷新赢三张手牌脚本
             case SConst.GameType.WINTHREEPOKER:
                 GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().UpdateData(model);
                 break;

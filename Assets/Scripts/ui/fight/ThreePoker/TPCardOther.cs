@@ -24,6 +24,10 @@ public class TPCardOther : CardOther {
         transform.Find("playerPoker/player4").gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 刷新赢三张用户手牌的绑定
+    /// </summary>
+    /// <param name="model"></param>
     protected override void UpdateItem(FightUserModel model)
     {
         int userid = GameSession.Instance.UserInfo.id;
@@ -32,12 +36,12 @@ public class TPCardOther : CardOther {
         if(model .id==userid)
         {
             //添加玩家id和玩家手牌的绑定
-            if(!UserCardList .ContainsKey (userid))
+            if(!UserCardList .ContainsKey (model.id))
             {
-                UserCardList.Add(userid, transform.Find("mypoker").gameObject);
+                UserCardList.Add(model.id, transform.Find("mypoker").gameObject);
             }else
             {
-                UserCardList [userid ]=transform.Find("mypoker").gameObject;
+                UserCardList [model.id] =transform.Find("mypoker").gameObject;
             }
         }else
         {
@@ -51,15 +55,15 @@ public class TPCardOther : CardOther {
             {
                 dir = GameApp.Instance.UI_HeadScript.PosList.Count - userdir + model.direction;
             }
-            if(!UserCardList.ContainsKey (userid ))
+            if(!UserCardList.ContainsKey (model .id))
             {
-                UserCardList.Add(userid, transform.Find("playerPoker/poker" + dir).gameObject);
+                UserCardList.Add(model.id, transform.Find("playerPoker/player" + dir).gameObject);
             }else
             {
-                UserCardList[userid] = transform.Find("playerPoker/poker" + dir).gameObject;
+                UserCardList[model.id] = transform.Find("playerPoker/player" + dir).gameObject;
             }
-            UserCardList[userid].gameObject.SetActive(false);
         }
+        UserCardList[model.id].gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -70,7 +74,7 @@ public class TPCardOther : CardOther {
     {
         if (!UserCardList.ContainsKey(userid)) return;
         //炸金花为三张牌
-        for (int i = 0; i < 4; i++)
+        for (int i = 1; i < 4; i++)
         {
             //获取手牌组件
             Image spr = UserCardList[userid].transform.Find("poker" + i).GetComponent<Image>();
@@ -78,6 +82,7 @@ public class TPCardOther : CardOther {
         }
         if(userid ==GameSession .Instance .UserInfo.id)
         {
+            //刷新状态
             UserCardList[userid].transform.Find("Image").gameObject.SetActive(true);
             UserCardList[userid].transform.Find("Image/Text").GetComponent<Text>().text = "点击看牌";
         }
@@ -85,6 +90,29 @@ public class TPCardOther : CardOther {
         {
             UserCardList[userid].transform.Find("Image").gameObject.SetActive(false);
         }
+        //将玩家手牌显示出来
         UserCardList[userid].gameObject.SetActive(true);
     }
+
+    /// <summary>
+    /// 下底注
+    /// </summary>
+    /// <param name="coin"></param>
+    public void BetBaseCoin(int coin)
+    {
+        for (int i = 0; i < coin; i++)
+        {
+            BetCoin(1);
+        }
+    }
+
+    /// <summary>
+    /// 下注
+    /// </summary>
+    /// <param name="coin"></param>
+    public void BetCoin(int coin)
+    {
+
+    }
+
 }
