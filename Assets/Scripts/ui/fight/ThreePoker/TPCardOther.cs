@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameProtocol.model.fight;
 using UnityEngine.UI;
+using System;
 
 public class TPCardOther : CardOther {
     /// <summary>
@@ -10,9 +11,30 @@ public class TPCardOther : CardOther {
     /// </summary>
     Dictionary<int, GameObject> UserCardList = new Dictionary<int, GameObject>();
 
+    /// <summary>
+    /// 下注筹码
+    /// </summary>
+    List<GameObject> BetCoinList = new List<GameObject>();
+
+    /// <summary>
+    /// 下注区域
+    /// </summary>
+    Transform BetAreaGo;
+
+    /// <summary>
+    /// 下注区域四周
+    /// </summary>
+    Rect BetCoinAreaBox = new Rect(58,81,1066,394);
+
+    /// <summary>
+    /// 随机数种子
+    /// </summary>
+    System.Random ran = new System.Random((int)DateTime.Now.Ticks);
+
     void Awake()
     {
         GameApp.Instance.CardOtherScript = this;
+        BetAreaGo = transform.FindChild("betarea");
     }
 
     void Start()
@@ -112,7 +134,13 @@ public class TPCardOther : CardOther {
     /// <param name="coin"></param>
     public void BetCoin(int coin)
     {
-
-    }
+        string path = GameResources.ItemResourcesPath + GameData.Instance.ItemName[GameResources.ItemTag.TPBETCOIN] + coin;
+        //随机一个下注区域内的x/y坐标
+        int x = ran.Next((int)BetCoinAreaBox.width / 2, (int)BetCoinAreaBox.width);
+        int y = ran.Next((int)BetCoinAreaBox.height / 2, (int)BetCoinAreaBox.height);
+        Vector3 pos = new Vector3(x- BetCoinAreaBox.width / 2, y- BetCoinAreaBox.height / 2);
+        GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, BetAreaGo, pos);
+        BetCoinList.Add(go);
+     }
 
 }

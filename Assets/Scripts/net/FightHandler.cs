@@ -72,6 +72,13 @@ public class FightHandler : MonoBehaviour, IHandler
                     GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().DrawCard(id);
                 }
                 break;
+            //获取底注
+            case FightProtocol.TPBETBASECOIN_BRQ:
+                {
+                    int coin = model.GetMessage<int>();
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().BetBaseCoin(coin);
+                }
+                break;
         }
     }
 

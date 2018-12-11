@@ -128,6 +128,7 @@ public class GameResources  {
     {
         HINTBOXITEM=0,//通用提示框
         TPHEAD=1,//赢三张头像
+        TPBETCOIN,//赢三张下注筹码
     }
 
     /// <summary>
@@ -137,6 +138,7 @@ public class GameResources  {
     {
         GameData.Instance.ItemName.Add(ItemTag.HINTBOXITEM, "hintitem");
         GameData.Instance.ItemName.Add(ItemTag.TPHEAD, "headImage0");
+        GameData.Instance.ItemName.Add(ItemTag.TPBETCOIN, "tpcoin/coin");
     }
     #endregion
 
