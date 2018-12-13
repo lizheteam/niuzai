@@ -79,6 +79,43 @@ public class FightHandler : MonoBehaviour, IHandler
                     GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().BetBaseCoin(coin);
                 }
                 break;
+                /// <summary>
+                /// 返回下注结果
+                /// -1 请求错误，没有此玩家
+                /// -2 请求错误，当前不是此玩家
+                /// -3 请求错误，游戏尚未开始
+                /// -4 低于当前可下最小金额
+                /// -5 大于当前可下最大金额
+                /// </summary>          
+                case FightProtocol.TPBETCOIN_SRES:
+                {
+                    int res = model.GetMessage<int>();
+                    switch (res)
+                    {
+                        case -1:
+                            {
+
+                            }
+                            break;
+                        case -2:
+                            { }
+                            break;
+                        case -3:
+                            { }
+                            break;
+                        case -4:
+                            {
+                                GameApp.Instance.CommonHintDlgScript.OpenHint("小于当前最小金额");
+                            }
+                            break;
+                        case -5:
+                            {
+                                GameApp.Instance.CommonHintDlgScript.OpenHint("大于当前最大金额");
+                            }
+                            break;
+                    }
+                }
+                break;
         }
     }
 

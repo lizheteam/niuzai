@@ -28,7 +28,7 @@ public class GameOther : MonoBehaviour {
                 UIPanel = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, uiParent, Vector3.zero);
                 //添加脚本
                 OtherPanel.gameObject.AddComponent<TPCardOther>();
-                uiParent.gameObject.AddComponent<UI_Fight>();
+                uiParent.gameObject.AddComponent<TPUI_Fight>().SetGameInfoPanel (UIPanel);
                 UIPanel.AddComponent<UI_Head>();
                 break;
             case GameProtocol.SConst.GameType.XZDD:

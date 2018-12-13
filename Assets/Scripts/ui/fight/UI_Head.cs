@@ -45,6 +45,11 @@ public class UI_Head : MonoBehaviour {
     /// <param name="userdir"></param>
     public void UpdateItem(FightUserModel model,int userdir)
     {
+        if(HeadList .ContainsKey (model.id))
+        {
+            HeadList[model.id].GetComponent<HeadItem>().UpdateItem(model);
+            return;
+        }
         //头像待刷新的位置
         Vector3 pos;
         //如果是玩家自己，直接使用第0个
@@ -63,12 +68,6 @@ public class UI_Head : MonoBehaviour {
                 //用玩家最大人数减去自己的方位再加上玩家的方位，即为玩家的位置
                 pos = PosList[PosList.Count - userdir + model.direction];
             }
-        }
-        //移除原有信息
-        if (HeadList.ContainsKey(model.id))
-        {
-            Destroy(HeadList[model.id]);
-            HeadList.Remove(model.id);
         }
         //加载头像到页面中
         string path = GameResources.ItemResourcesPath + GameData.Instance.ItemName[GameResources.ItemTag.TPHEAD];

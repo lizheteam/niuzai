@@ -25,12 +25,32 @@ public class UI_Fight : MonoBehaviour {
     /// <summary>
     /// 时间刷新计时器id
     /// </summary>
-    int UpdateTimeId = -1;
+    protected int UpdateTimeId = -1;
 
     /// <summary>
     /// 玩家id和对战信息的队伍信息集
     /// </summary>
     Dictionary<int, FightUserModel> TeamInfo = new Dictionary<int, FightUserModel>();
+
+    /// <summary>
+    /// 定义泛型object==UI_Fight，通过泛型来获取子类
+    /// </summary>
+    private object fightui
+    {
+        get
+        {
+            return GameApp.Instance.UI_FightScript;
+        }
+    }
+    public T GetUIFight<T>()
+    {
+        return (T)fightui;
+    }
+
+    /// <summary>
+    /// 游戏层
+    /// </summary>
+    protected GameObject GameInfoPanel;
 
     void Awake()
     {
@@ -84,17 +104,21 @@ public class UI_Fight : MonoBehaviour {
     /// <param name="model"></param>
     public void UpdateTeam(FightUserModel model)
     {
+        if (TeamInfo.ContainsKey(model.id))
+        {
+            if (TeamInfo.ContainsKey(GameSession.Instance.UserInfo.id))
+            {
+                //TODO:更新玩家信息
+                GameApp.Instance.UI_HeadScript.UpdateItem(model, TeamInfo[GameSession.Instance.UserInfo.id].direction);
+            }
+            return;
+        }
         switch (GameSession .Instance.RoomeType )
         {
             //如果当前游戏类型是赢三张，则直接刷新赢三张手牌脚本
             case SConst.GameType.WINTHREEPOKER:
                 GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().UpdateData(model);
                 break;
-        }
-        if(TeamInfo .ContainsKey (model .id))
-        {
-            //TODO:更新玩家信息
-            return;
         }
         //添加队伍成员
         TeamInfo.Add(model.id, model);
@@ -117,4 +141,14 @@ public class UI_Fight : MonoBehaviour {
 
         }
     }
+
+    /// <summary>
+    /// 添加游戏UI层
+    /// </summary>
+    /// <param name="go"></param>
+    public void SetGameInfoPanel(GameObject go)
+    {
+        GameInfoPanel = go;
+    }
+
 }
