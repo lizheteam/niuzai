@@ -147,10 +147,22 @@ public class GameResources  {
     {
         NULL=0,
         MAINBACKGROUNDMUSIC=1,//主界面背景音乐
+        TPWITHBETCOIN=2,      //赢三张跟注音效
+        TPADDBETCOIN=3,       //赢三张加注音效
+        TPMOVEBETCOIN=4,      //赢三张筹码移动音效
+        TPCHECKCARD,          //赢三张看牌音效
+        TPDISCARD,            //赢三张弃牌
+        TPCOMCARD,            //赢三张比牌
     }
     void RegisterMusicTag()
     {
         GameData.Instance.MusicTag.Add(MusicTag.MAINBACKGROUNDMUSIC, "backmusic");
+        GameData.Instance.MusicTag.Add(MusicTag.TPWITHBETCOIN , "gb_wcall");
+        GameData.Instance.MusicTag.Add(MusicTag.TPADDBETCOIN, "gb_wraise");
+        GameData.Instance.MusicTag.Add(MusicTag.TPMOVEBETCOIN, "gb_coinmove");
+        GameData.Instance.MusicTag.Add(MusicTag.TPCHECKCARD, "gb_wcheck");
+        GameData.Instance.MusicTag.Add(MusicTag.TPDISCARD, "gb_wfold");
+        GameData.Instance.MusicTag.Add(MusicTag.TPCOMCARD, "gb_wcmp");
     }
     #endregion
 
@@ -168,6 +180,11 @@ public class GameResources  {
     /// 音乐资源存储路径
     /// </summary>
     public const string AudioResourcesPath = "Audio/";
+
+    /// <summary>
+    /// 炸金花音乐资源存储路径
+    /// </summary>
+    public const string TPAudioResourcesPath = "Audio/TP/";
 
     /// <summary>
     /// 扑克资源存储路径

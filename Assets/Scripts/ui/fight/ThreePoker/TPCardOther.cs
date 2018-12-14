@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameProtocol.model.fight;
 using UnityEngine.UI;
 using System;
+using GameProtocol;
 
 public class TPCardOther : CardOther {
     /// <summary>
@@ -24,7 +25,7 @@ public class TPCardOther : CardOther {
     /// <summary>
     /// 下注区域四周
     /// </summary>
-    Rect BetCoinAreaBox = new Rect(58,81,1066,394);
+    Rect BetCoinAreaBox = new Rect(8,131,1066,394);
 
     /// <summary>
     /// 随机数种子
@@ -65,6 +66,7 @@ public class TPCardOther : CardOther {
             {
                 UserCardList [model.id] =transform.Find("mypoker").gameObject;
             }
+            RechangeStatus(2, model.id);
         }else
         {
             //玩家方位在组件中的尾缀
@@ -141,6 +143,71 @@ public class TPCardOther : CardOther {
         Vector3 pos = new Vector3(x- BetCoinAreaBox.width / 2, y- BetCoinAreaBox.height / 2);
         GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, BetAreaGo, pos);
         BetCoinList.Add(go);
+        string moveEffectPath = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPMOVEBETCOIN];
+        GameApp.Instance.MusicManagerScript.PlayAudioEffect(moveEffectPath);
      }
+
+    /// <summary>
+    /// 看牌
+    /// </summary>
+    /// <param name="poker"></param>
+    public void CheckCard(List <PokerModel > poker)
+    {
+        if (!UserCardList.ContainsKey(GameSession.Instance.UserInfo.id)) return;
+        //mypoker 
+        Transform tf= UserCardList[GameSession.Instance.UserInfo.id].transform;
+        for (int i = 0; i < poker .Count; i++)
+        {
+            if (i > 2) break;
+            Image img = tf.Find("poker" + (i + 1)).GetComponent<Image>();
+            string path = GameResources.PokerResourcesPath + "_" + poker[i].Value + "_" + poker[i].Color;
+            img.sprite = GameApp.Instance.ResourcesManagerScript.LoadSprite(path);
+        }
+    }
+
+    /// <summary>
+    /// 修改状态
+    /// </summary>
+    /// <param name="status"></param>
+    /// <param name="uid"></param>
+    public void RechangeStatus(int status,int uid)
+    {
+        if (!UserCardList.ContainsKey(uid)) return;
+        //mypoker
+        Transform tf= UserCardList[uid].transform;
+        tf.FindChild ("Image").gameObject.SetActive(true);
+        switch (status)
+        {
+            //看牌
+            case 0:
+                {
+                    tf.FindChild("Image/Text").GetComponent<Text>().text = "已看牌";
+                    string path = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPCHECKCARD];
+                    GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
+                }
+                break;
+            //弃牌
+            case 1:
+                {
+                    tf.FindChild("Image/Text").GetComponent<Text>().text = "已弃牌";
+                    string path = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPDISCARD ];
+                    GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
+                }
+                break;
+            //点击看牌
+            case 2:
+                {
+                    //为看牌按钮添加一个点击事件
+                    tf.FindChild("Image").GetComponent<Button>().onClick.RemoveAllListeners();
+                    tf.FindChild("Image").GetComponent<Button>().onClick.AddListener(delegate () {
+                        this.Write(TypeProtocol.FIGHT, FightProtocol.TPCHECKCARD_CREQ, null);
+                    });
+                    tf.FindChild("Image/Text").GetComponent<Text>().text = "点击看牌";
+                    //string path = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPCHECKCARD];
+                    //GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
+                }
+                break;
+        }
+    }
 
 }

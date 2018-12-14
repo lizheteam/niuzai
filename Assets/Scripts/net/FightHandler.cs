@@ -79,30 +79,19 @@ public class FightHandler : MonoBehaviour, IHandler
                     GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().BetBaseCoin(coin);
                 }
                 break;
-                /// <summary>
-                /// 返回下注结果
-                /// -1 请求错误，没有此玩家
-                /// -2 请求错误，当前不是此玩家
-                /// -3 请求错误，游戏尚未开始
-                /// -4 低于当前可下最小金额
-                /// -5 大于当前可下最大金额
-                /// </summary>          
-                case FightProtocol.TPBETCOIN_SRES:
+            /// <summary>
+            /// 返回下注结果
+            /// -1 请求错误，没有此玩家
+            /// -2 请求错误，当前不是此玩家
+            /// -3 请求错误，游戏尚未开始
+            /// -4 低于当前可下最小金额
+            /// -5 大于当前可下最大金额
+            /// </summary>          
+            case FightProtocol.TPBETCOIN_SRES:
                 {
                     int res = model.GetMessage<int>();
                     switch (res)
                     {
-                        case -1:
-                            {
-
-                            }
-                            break;
-                        case -2:
-                            { }
-                            break;
-                        case -3:
-                            { }
-                            break;
                         case -4:
                             {
                                 GameApp.Instance.CommonHintDlgScript.OpenHint("小于当前最小金额");
@@ -114,6 +103,33 @@ public class FightHandler : MonoBehaviour, IHandler
                             }
                             break;
                     }
+                }
+                break;
+            //玩家下注广播
+            case FightProtocol.TPBETCOIN_BRQ:
+                {
+                    TPBetModel m = model.GetMessage<TPBetModel>();
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().BetCoin(m.coin);
+                    //播放音效，默认加注，否则跟注
+                    string path = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPADDBETCOIN];
+                    if (!m.isAdd )
+                        path = GameResources.TPAudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPWITHBETCOIN];
+                    GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
+                }
+                break;
+            case FightProtocol.TPCHECKCARD_SRES:
+                {
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().CheckCard(model.GetMessage<List <PokerModel>>());
+                }
+                break;
+            case FightProtocol.TPCHECKCARD_BRQ:
+                {
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().RechangeStatus(0, model.GetMessage<int>());
+                }
+                break;
+            case FightProtocol.TPDISCARD_BRQ:
+                {
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().RechangeStatus(1, model.GetMessage<int>());
                 }
                 break;
         }

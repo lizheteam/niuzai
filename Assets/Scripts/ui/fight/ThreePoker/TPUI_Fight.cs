@@ -30,7 +30,8 @@ public class TPUI_Fight : UI_Fight {
         //获取弃牌按钮
         Button DiscardBtn = GameInfoPanel.transform.Find("system/disButton").GetComponent<Button>();
         DiscardBtn.onClick.AddListener(delegate () {
-
+            //向服务器请求弃牌
+            this.Write(TypeProtocol.FIGHT, FightProtocol.TPDISCARD_CREQ, null);
         });
         //获取比牌按钮
         Button CompareBtn = GameInfoPanel.transform.Find("system/compareButton").GetComponent<Button>();
