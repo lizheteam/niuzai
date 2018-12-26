@@ -106,6 +106,7 @@ public class GameResources  {
         MATCHPANEL,//匹配页面
         CARDOTHER_TP,//三张游戏桌子页面
         UIFIGHT_TP,//三张游戏UI页面
+        TPSETTLEMENT,//三张结算页面
     }
     /// <summary>
     /// 系统页面
@@ -117,6 +118,7 @@ public class GameResources  {
         GameData.Instance.SystemUI.Add(SystemUIType.MATCHPANEL, "system/MatchPanel");
         GameData.Instance.SystemUI.Add(SystemUIType.CARDOTHER_TP, "system/CardPanel_TP");
         GameData.Instance.SystemUI.Add(SystemUIType.UIFIGHT_TP, "system/UI_FightTP");
+        GameData.Instance.SystemUI.Add(SystemUIType.TPSETTLEMENT, "system/TPSettlement");
     }
     #endregion
 
@@ -129,6 +131,7 @@ public class GameResources  {
         HINTBOXITEM=0,//通用提示框
         TPHEAD=1,//赢三张头像
         TPBETCOIN,//赢三张下注筹码
+        TPSETTLEMENTITEM=3,//赢三张结算
     }
 
     /// <summary>
@@ -139,6 +142,7 @@ public class GameResources  {
         GameData.Instance.ItemName.Add(ItemTag.HINTBOXITEM, "hintitem");
         GameData.Instance.ItemName.Add(ItemTag.TPHEAD, "headImage0");
         GameData.Instance.ItemName.Add(ItemTag.TPBETCOIN, "tpcoin/coin");
+        GameData.Instance.ItemName.Add(ItemTag.TPSETTLEMENTITEM, "TPSettlementItemImage");
     }
     #endregion
 

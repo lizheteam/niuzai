@@ -13,6 +13,11 @@ public class TPCardOther : CardOther {
     Dictionary<int, GameObject> UserCardList = new Dictionary<int, GameObject>();
 
     /// <summary>
+    /// 用户比牌列表,只存对手的，不存自己的
+    /// </summary>
+    Dictionary<int, GameObject> UserCompareList = new Dictionary<int, GameObject>();
+
+    /// <summary>
     /// 下注筹码
     /// </summary>
     List<GameObject> BetCoinList = new List<GameObject>();
@@ -45,6 +50,10 @@ public class TPCardOther : CardOther {
         transform.Find("playerPoker/player2").gameObject.SetActive(false);
         transform.Find("playerPoker/player3").gameObject.SetActive(false);
         transform.Find("playerPoker/player4").gameObject.SetActive(false);
+        transform.Find("reqCompare/Button1").gameObject.SetActive(false);
+        transform.Find("reqCompare/Button2").gameObject.SetActive(false);
+        transform.Find("reqCompare/Button3").gameObject.SetActive(false);
+        transform.Find("reqCompare/Button4").gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -79,13 +88,26 @@ public class TPCardOther : CardOther {
             {
                 dir = GameApp.Instance.UI_HeadScript.PosList.Count - userdir + model.direction;
             }
-            if(!UserCardList.ContainsKey (model .id))
+            //
+            if (!UserCompareList.ContainsKey(model.id))
+                UserCompareList.Add(model.id, transform.Find("reqCompare/Button" +dir ).gameObject);
+            else
+                UserCompareList[model.id]= transform.Find("reqCompare/Button" + dir).gameObject;
+            UserCompareList[model.id].SetActive(true);
+            if (!UserCardList.ContainsKey(model.id))
             {
                 UserCardList.Add(model.id, transform.Find("playerPoker/player" + dir).gameObject);
-            }else
+            }
+            else
             {
                 UserCardList[model.id] = transform.Find("playerPoker/player" + dir).gameObject;
             }
+            int modelId = model.id;
+            //向服务器请求比牌
+            UserCompareList[model.id].GetComponent<Button>().onClick.RemoveAllListeners();
+            UserCompareList[model.id].GetComponent<Button>().onClick.AddListener(delegate () {
+                this.Write(TypeProtocol.FIGHT, FightProtocol.TPCOMCARD_CREQ, modelId);
+            });
         }
         UserCardList[model.id].gameObject.SetActive(false);
     }
@@ -207,7 +229,104 @@ public class TPCardOther : CardOther {
                     //GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
                 }
                 break;
+            //比牌失败
+            case 3:
+                {
+                    tf.FindChild("Image/Text").GetComponent<Text>().text = "失败";
+                }
+                break;
         }
     }
 
+    public void Compare(TPCompareModel model)
+    {
+        transform.Find("reqCompare").gameObject.SetActive(false);
+        Transform tf = transform.Find("compare");
+
+        //请求比牌的玩家信息（昵称）
+        Debug.Log("TeamInfo .Count:" + TeamInfo .Count );
+        Debug.Log(TeamInfo[model.userId ]);
+
+        string name1 = TeamInfo[model.userId].nickname;
+        Text textName1 = tf.Find("Text1").GetComponent<Text>();
+        textName1.text = name1;
+        Text textFinish1 = tf.Find("TextFinish1").GetComponent<Text>();
+        textFinish1.text = "";
+        //被请求比牌的玩家信息（昵称）
+        string name2 = TeamInfo[model.compId].nickname;
+        Text textName2 = tf.Find("Text2").GetComponent<Text>();
+        textName2.text = name2;
+        Text textFinish2 = tf.Find("TextFinish2").GetComponent<Text>();
+        textFinish2.text = "";
+        //刷新左边手牌状态
+        for (int i = 0; i < 3; i++)
+        {
+            Image card = tf.Find("Image1"+(i+1)).GetComponent<Image>();
+            //如果扑克列表中不包含此张牌，则显示背面
+            if (model .PokerList1 .Count < i + 1)
+            {
+                card.sprite = GameApp.Instance.ResourcesManagerScript.LoadSprite(GameResources.PokerBgResourcesPath);
+            }else
+            {
+                //正面牌面
+                card.sprite = GameApp.Instance.ResourcesManagerScript.LoadSprite(
+                    GameResources.PokerResourcesPath + "_" + model.PokerList1[i].Value
+                    + "_" + model.PokerList1[i].Color 
+                    );
+            }
+        }
+        //刷新右边手牌状态
+        for (int i = 0; i < 3; i++)
+        {
+            Image card = tf.Find("Image2"+(i+1)).GetComponent<Image>();
+            //如果扑克列表中不包含此张牌，则显示背面
+            if (model.PokerList2.Count < i + 1)
+            {
+                card.sprite = GameApp.Instance.ResourcesManagerScript.LoadSprite(GameResources.PokerBgResourcesPath);
+            }
+            else
+            {
+                //正面牌面
+                card.sprite = GameApp.Instance.ResourcesManagerScript.LoadSprite(
+                    GameResources.PokerResourcesPath + "_" + model.PokerList2[i].Value
+                    + "_" + model.PokerList2[i].Color
+                    );
+            }
+        }
+        tf.gameObject.SetActive(true);
+
+        GameApp.Instance.TimeManagerScript.AddShedule(delegate ()
+        {
+            //将比牌结果显示出来
+            if (model.Result)
+            {
+                textFinish1.text = "胜";
+                textFinish2.text = "负";
+                RechangeStatus(3, model.compId);
+            }
+            else
+            {
+                textFinish1.text = "负";
+                textFinish2.text = "胜";
+                RechangeStatus(3, model.userId);
+            }
+        }, 2000);
+
+        GameApp.Instance.TimeManagerScript.AddShedule(delegate () {
+            //将比牌结果隐藏
+            tf.gameObject.SetActive(false);
+        },5000);
+    }
+
+    public void UIFightReqCompare()
+    {
+        if (transform.Find("reqCompare").gameObject.activeInHierarchy)
+        {
+            transform.Find("reqCompare").gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.Find("reqCompare").gameObject.SetActive(true);
+        }
+    }
 }

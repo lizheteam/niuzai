@@ -120,4 +120,37 @@ public class GameApp  {
                 return 4;
         }
     }
+
+    /// <summary>
+    /// 判断当前是否为安卓平台
+    /// </summary>
+    public bool IsAndroid
+    {
+        get
+        {
+            //unity的平台宏定义
+#if UNITY_ANDROID
+            return true;
+#else
+            return false;
+#endif
+        }
+    }
+
+    /// <summary>
+    /// 判断当前是否为苹果平台
+    /// </summary>
+    public bool IsIPhone
+    {
+        get
+        {
+            //unity的平台宏定义
+#if UNITY_IPHONE
+            return true;
+#else
+            return false;
+#endif
+        }
+    }
+
 }

@@ -7,12 +7,14 @@ using GameProtocol.model.login;
 public class UI_Login : MonoBehaviour {
     Button QuickBtn;//快速登录
     Button WeChatBtn;//微信账号登录
+    Button AccountButton;//账号登录
     InputField UsernameIF;//账号输入框
 
     void Awake()
     {
         GameApp.Instance.UI_LoginScript = this;
         QuickBtn = transform.FindChild("Panel/QuickButton").GetComponent<Button>();
+        AccountButton = transform.FindChild("Panel/AccountButton").GetComponent<Button>();
         WeChatBtn = transform.FindChild("Panel/WeChatButton").GetComponent<Button>();
         UsernameIF = transform.FindChild("Panel/username").GetComponent<InputField >();
         OnClick();
@@ -28,14 +30,9 @@ public class UI_Login : MonoBehaviour {
             //GameApp.Instance.NetMessageUtilScript.NetIO.write(TypeProtocol.LOGIN, LoginProtocol.QUICKREG_CREQ, null);
             Debug.Log("请求快速注册登录");
             GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
-            GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
-            GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
-            GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
-            GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
-            GameApp.Instance.CommonHintDlgScript.OpenHint("请求快速注册登录");
         });
         //为账号登录添加回调事件
-        WeChatBtn.onClick.AddListener(delegate () {
+        AccountButton.onClick.AddListener(delegate () {
             string user = UsernameIF.text;
             if (user.Length < 6) return;
             //创建一个账号登录对象
@@ -46,6 +43,12 @@ public class UI_Login : MonoBehaviour {
             this.Write(TypeProtocol.LOGIN, LoginProtocol.ENTER_CREQ, rlm);
             //GameApp.Instance.NetMessageUtilScript.NetIO.write(TypeProtocol.LOGIN, LoginProtocol.ENTER_CREQ, rlm);
             Debug.Log("请求账号登录");
+        });
+        //为微信登录添加回调事件
+        int TouchCount = 0;
+        WeChatBtn.onClick.AddListener(()=>{
+            FNSdk.Instance.WeChatLogin(TouchCount.ToString());
+            TouchCount++;
         });
     }
 }

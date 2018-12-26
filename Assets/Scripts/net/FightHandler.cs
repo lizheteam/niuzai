@@ -124,6 +124,8 @@ public class FightHandler : MonoBehaviour, IHandler
                 break;
             case FightProtocol.TPCHECKCARD_BRQ:
                 {
+                    string path = GameResources.AudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPCHECKCARD];
+                    GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
                     GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().RechangeStatus(0, model.GetMessage<int>());
                 }
                 break;
@@ -132,6 +134,20 @@ public class FightHandler : MonoBehaviour, IHandler
                     GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().RechangeStatus(1, model.GetMessage<int>());
                 }
                 break;
+            case FightProtocol.TPCOMCARD_BRQ:
+                {
+                    TPCompareModel tpcm = model.GetMessage<TPCompareModel>();
+                    string path = GameResources.AudioResourcesPath + GameData.Instance.MusicTag[GameResources.MusicTag.TPCOMCARD];
+                    GameApp.Instance.MusicManagerScript.PlayAudioEffect(path);
+                    GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().Compare(tpcm);
+                }
+                break;
+            //游戏结算
+            case FightProtocol.GAMESETTLMENT_BRQ:
+                {
+                    GameApp.Instance.UI_FightScript.GetUIFight<TPUI_Fight>().GameOver(model.GetMessage<List <TPSettlementModel >>());
+                }
+                break; 
         }
     }
 

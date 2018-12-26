@@ -122,7 +122,7 @@ public class NetMessageUtil : MonoBehaviour {
         //IP+端口  可以访问一个程序的网络接口
         //www.baidu.com = 61.135.169.121:80
         //为网络组件进行服务器连接初始化
-        NetIO.Initialize("127.0.0.1", 6650);
+        NetIO.Initialize("192.168.50.234", 6650);
         //开始连接服务器
         NetIO.ConnnectToSever();
 

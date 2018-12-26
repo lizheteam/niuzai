@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using GameProtocol;
+using System.Collections.Generic;
+using GameProtocol.model.fight;
 
 public class TPUI_Fight : UI_Fight {
 
@@ -36,7 +38,7 @@ public class TPUI_Fight : UI_Fight {
         //获取比牌按钮
         Button CompareBtn = GameInfoPanel.transform.Find("system/compareButton").GetComponent<Button>();
         CompareBtn.onClick.AddListener(delegate () {
-
+            GameApp.Instance.CardOtherScript.GetCardOther<TPCardOther>().UIFightReqCompare();
         });
         //获取跟注按钮
         Button BetCoinBtn = GameInfoPanel.transform.Find("system/betButton").GetComponent<Button>();
@@ -92,5 +94,12 @@ public class TPUI_Fight : UI_Fight {
             //根据单选框的选中状态来显示/隐藏加注页面
             GameInfoPanel.transform.Find("system/AddBetPanel").gameObject.SetActive(isOn);
         });
+    }
+
+    public void GameOver(List<TPSettlementModel> list)
+    {
+        string path = GameResources.UIResourcesPath + GameData.Instance.SystemUI[GameResources.SystemUIType.TPSETTLEMENT];
+        GameObject go = GameApp.Instance.ResourcesManagerScript.LoadInstantiateGameObject(path, transform, Vector3.zero);
+        go.AddComponent<TPSettlement>().ShowGameOver (list);
     }
 }

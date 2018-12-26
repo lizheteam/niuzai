@@ -63,7 +63,11 @@ public class MatchHandler : MonoBehaviour, IHandler
                 break;
             case MatchProtocol.MATCHCLOSE_BRQ:
                 {
-                    GameApp.Instance.GameLevelManagerScript.LoadScene(GameResources.SceneName.MAIN);
+                    GameApp.Instance.TimeManagerScript.AddShedule(delegate ()
+                    {
+                        GameApp.Instance.CommonHintDlgScript.OpenHint("游戏将于五秒后自动返回大厅");
+                        this.Write(TypeProtocol.USER, UserProtocol.GETINFO_CREQ, null);
+                    }, 5000);
                 }
                 break;
             case MatchProtocol.MATCHFINISH_BRQ:
