@@ -1,5 +1,6 @@
 package com.lcqp.lcqp;
 
+import com.lcqp.lcqp.wxapi.WXEntryActivity;
 import com.unity3d.player.*;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class UnityPlayerActivity extends Activity
 {
@@ -27,7 +29,24 @@ public class UnityPlayerActivity extends Activity
 		setContentView(mUnityPlayer);
 		mUnityPlayer.requestFocus();
 	}
-
+    
+	public void WeChatLogin(String code){	
+		//系统提示
+		//Toast.makeText(this, "微信登录点击成功" + code, Toast.LENGTH_LONG).show();
+		//UnityPlayer.UnitySendMessage("SDKMessage", "OpenCommonBox", "请求微信登录" + code);
+		WXEntryActivity.WechatLogin(new WXEntryActivity.WechatInterface() {
+			
+			@Override
+			public void getResponse(String Code) {
+				// TODO Auto-generated method stub
+				//游戏提示
+				UnityPlayer.UnitySendMessage("SDKMessage", "OpenCommonBox","微信登录临时票据获取成功" + Code);
+				UnityPlayer.UnitySendMessage("SDKMessage", "OpenCommonBox", "你好");
+			}
+		});
+		UnityPlayer.UnitySendMessage("SDKMessage", "OpenCommonBox", "请求微信登录" + code);
+	}
+	
 	// Quit Unity
 	@Override protected void onDestroy ()
 	{
